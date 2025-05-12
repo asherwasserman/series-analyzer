@@ -11,50 +11,70 @@
 
             }
 
+
             //Allows you to change the series
             List<int> changingTheSeries()
             {
-                return 0;
+                List<int> series = new List<int>();
+                bool doasANumber = false;
+                while (doasANumber == false) 
+                {
+                    Console.WriteLine("please enter a series: ");
+                    string input = Console.ReadLine()!;
+                    string[] trySeries = input.Split(' ' , ',');
+                    int number;
+                    foreach (string s in trySeries)
+                    {
+                        doasANumber = int.TryParse(s, out number);
+                        series.Add(number);
+                        if (doasANumber == false)
+                        {
+                            Console.WriteLine("Invalid series");
+                            break;
+                        }
+                    }
+                }
+                return series;
 
             }
 
-            //Returens the series in sorted order.
-            List<int> sorted()
+            //receiving a series - Returens the series in sorted order.
+            List<int> sort()
             {
 
             }
 
-            //Returns the series in reverse
+            //receiving a series - Returns the series in reverse
             List<int> reverse()
             {
 
             }
 
-            //Returns the maximum term in the series.
+            //receiving a series - Returns the maximum term in the series.
             int max()
             {
 
             }
 
-            //Returns the minimum term in the series.
+            //receiving a series - Returns the minimum term in the series.
             int min()
             {
 
             }
 
-            //Returns the sum of the elements in the series
+            //receiving a series - Returns the sum of the elements in the series
             int sumOfElements()
             {
 
             }
 
-            //Returns the sum of all elements in a series
+            //receiving a series - Returns the sum of all elements in a series
             int sumOfAll()
             {
 
             }
 
-            //Returns the average of the array elements
+            //receiving a series - Returns the average of the array elements
             int average()
             {
 
