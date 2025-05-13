@@ -25,7 +25,7 @@ namespace SeriesAnlyzer
             {
                 List<int> series = new List<int>();
                 
-                while (true) 
+                while (series.Count > 0) 
                 {
                     Console.WriteLine("please enter a series: ");
                     string input = Console.ReadLine()!;
@@ -49,7 +49,6 @@ namespace SeriesAnlyzer
                     if(doasANumber && newSeries.Count >= 3)
                     {
                         series = newSeries;
-                        break;
                     }
                 }
                 return series;
@@ -113,9 +112,14 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the sum of all elements in a series
-            int sumOfAll()
+            int sumOfAll(List<int> series)
             {
-
+                int sum = 0;
+                for (int i = 0; i < series.Count; i++)
+                {
+                    sum += series[i];
+                }    
+                return sum;
             }
 
             //receiving a series - Returns the average of the array elements
