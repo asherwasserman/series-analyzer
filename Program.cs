@@ -6,15 +6,32 @@ namespace SeriesAnlyzer
 {
  class Program
     {
-        static void Main(string[] seriesArr)
+        static void Main(string[] args)
         {
-            Menu(seriesArr);
+            IfArgs();
+
+            //Checks if there is a pre-saved value
+            void IfArgs()
+            {
+                if (args.Length < 3)
+                {
+                    List<int> series = ListStringToInt(ArrayIntToList(args));
+                    series = ChangingTheSeries();
+                    Console.WriteLine("\nThe series was successfully changed");
+                    Menu(series);
+                }
+                else
+                {
+                    List<int> series = ListStringToInt(ArrayIntToList(args));
+                    Menu(series);
+                }
+            }
 
             //Main function that displays a menu
-            void Menu(string[] seriesArr)
+            void Menu(List<int> series)
             {
-                List<int> series = ListStringToInt(ArrayIntToList(seriesArr));
                 bool isRunnig = true;
+                
                 while (isRunnig) 
                 {
                     PrintMenu();
@@ -124,7 +141,7 @@ namespace SeriesAnlyzer
  
                 while (SumOfElements(series) == 0) 
                 {
-                    Console.WriteLine("\nplease enter a series: ");
+                    Console.WriteLine("\nplease enter a series, Separated by a space or comma: ");
                     string input = Console.ReadLine()!;
                     string[] trySeries = input.Split(' ' , ',');
                     if (trySeries.Length >= 3)
