@@ -12,20 +12,83 @@ namespace SeriesAnlyzer
                 int num = Convert.ToInt32(seriesArr[i]);
                 series.Add(num);
             }
+            menu();
 
             //Main function that displays a menu
             void menu()
             {
+                bool run = true;
+                while (run) 
+                { 
+                    Console.WriteLine("Select one of the following options:\n"
+                        + "a. Enter a new series of numbers (separate each number with a space)\n"
+                        + "b. Print the current series of numbers \n" 
+                        + "c. Print the current series of numbers in reverse\n" +
+                        "d. Print the current series of numbers sorted \n" +
+                        "e. Print the highest value in the current series of numbers\n" + 
+                        "f. Print the lowest value in the current series of numbers\n" +  
+                        "g. Print the average of the current series of numbers\n" + 
+                        "h. Print the number of numbers in the series\n" +  
+                        "i. Print the sum of the total elements in the series\n" +
+                        "j. Exit");
+                    string choice = Console.ReadLine();
+                    switch (choice)
+                    {
+                        case "a":
+                            series = changingTheSeries();
+                            break;
+                        case "b":
+                            printTheSeries(series);
+                            break;
+                        case "c":
+                            {
+                                printTheSeries(reverse(series));
+                                break;
+                            }
+                        case "d":
+                            {
+                                printTheSeries(sort(series));
+                                break;
+                            }
+                        case "e":
+                            Console.WriteLine(max(series));
+                            break;
+                        case "f":
+                            Console.WriteLine(min(series));
+                            break;
+                        case "g":
+                            Console.WriteLine(average(series));
+                            break;
+                        case "h":
+                            Console.WriteLine(sumOfElements(series));
+                            break;
+                        case "i":
+                            Console.WriteLine(sumOfAll(series));
+                            break;
+                        case "j":
+                            run = false;
+                            break;
+                    }
 
+                }
             }
 
+            //receiving a series - prints the series
+            void printTheSeries(List<int> series)
+            {
+                foreach(int item in series)
+                {
+                    Console.Write(item + " ");
+                }
+                Console.WriteLine("");
+            }
 
             //Allows you to change the series
             List<int> changingTheSeries()
             {
                 List<int> series = new List<int>();
                 
-                while (series.Count > 0) 
+                while (series.Count == 0) 
                 {
                     Console.WriteLine("please enter a series: ");
                     string input = Console.ReadLine()!;
@@ -55,7 +118,7 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returens the series in sorted order.
-            List<int> sort()
+            List<int> sort(List<int> series)
             {
                 List<int> newSeries = new List<int>();
                 for(int i = 0;i < series.Count; i++)
@@ -70,7 +133,7 @@ namespace SeriesAnlyzer
             List<int> reverse(List <int> series)
             {
                 List<int> newSeries = new List<int>();
-                for(int i = series.Count; i >=0; i--)
+                for(int i = series.Count - 1; i >=0; i--)
                 {
                     newSeries.Add(series[i]);
                 }  
@@ -92,7 +155,7 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the minimum term in the series.
-            int min()
+            int min(List<int> series)
             {
                 int min = series[0];
                 for (int i = 1; i < series.Count; i++)
