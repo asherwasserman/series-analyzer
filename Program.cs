@@ -1,4 +1,6 @@
 ﻿using System.Collections.Immutable;
+using System.Timers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SeriesAnlyzer
 {
@@ -6,10 +8,10 @@ namespace SeriesAnlyzer
     {
         static void Main(string[] seriesArr)
         {
-            menu(seriesArr);
+            Menu(seriesArr);
 
             //Main function that displays a menu
-            void menu(string[] seriesArr)
+            void Menu(string[] seriesArr)
             {
                 List<int> series = ListStringToInt(ArrayIntToList(seriesArr));
                 bool isRunnig = true;
@@ -20,43 +22,47 @@ namespace SeriesAnlyzer
                     switch (choice)
                     {
                         case "a":
-                            series = changingTheSeries();
+                            series = ChangingTheSeries();
+                            Console.WriteLine("\nThe series was successfully changed");
                             break;
 
                         case "b":
-                            printTheSeries(series);
+                            PrintTheSeries(series);
                             break;
 
                         case "c":
-                                printTheSeries(reverse(series));
+                                PrintTheSeries(Reverse(series));
                                 break;
                             
                         case "d":
-                                printTheSeries(sort(series));
+                                PrintTheSeries(Sort(series));
                                 break; 
 
                         case "e":
-                            Console.WriteLine(max(series));
+                            Console.WriteLine("\n" + Max(series));
                             break;
 
                         case "f":
-                            Console.WriteLine(min(series));
+                            Console.WriteLine("\n" + Min(series));
                             break;
 
                         case "g":
-                            Console.WriteLine(average(series));
+                            Console.WriteLine("\n" + Average(series));
                             break;
 
                         case "h":
-                            Console.WriteLine(sumOfElements(series));
+                            Console.WriteLine("\n" + SumOfElements(series));
                             break;
 
                         case "i":
-                            Console.WriteLine(sumOfAll(series));
+                            Console.WriteLine("\n" + SumOfAll(series));
                             break;
 
                         case "j":
                             isRunnig = false;
+                            break;
+                        default:
+                            Console.WriteLine("\nInvalid input");
                             break;
                     }
 
@@ -66,7 +72,7 @@ namespace SeriesAnlyzer
             //Prints a menu for the series analyzer
             void PrintMenu()
             {
-                Console.WriteLine("Select one of the following options:\n"
+                Console.WriteLine("\nSelect one of the following options:\n"
                         + "a. Enter a new series of numbers (separate each number with a space)\n"
                         + "b. Print the current series of numbers \n"
                         + "c. Print the current series of numbers in reverse\n" +
@@ -102,7 +108,7 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - prints the series
-            void printTheSeries(List<int> series)
+            void PrintTheSeries(List<int> series)
             {
                 foreach(int item in series)
                 {
@@ -112,61 +118,91 @@ namespace SeriesAnlyzer
             }
 
             //Allows you to change the series
-            List<int> changingTheSeries()
+            List<int> ChangingTheSeries()
             {
                 List<int> series = new List<int>();
-                
-                while (sumOfElements(series) == 0) 
+ 
+                while (SumOfElements(series) == 0) 
                 {
-                    Console.WriteLine("please enter a series: ");
+                    Console.WriteLine("\nplease enter a series: ");
                     string input = Console.ReadLine()!;
                     string[] trySeries = input.Split(' ' , ',');
-                    List<int> newSeries = new List<int>();
-                    bool doasANumber = true;
-                    int number;
-
-                    foreach (string s in trySeries)
+                    if (trySeries.Length >= 3)
                     {
-                        if (int.TryParse(s, out number))
-                        {
-                            newSeries.Add(number);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid series");
-                            doasANumber = false;
-                            break;
-                        }
-                    }
-                    if(doasANumber && newSeries.Count >= 3)
-                    {
-                        series = newSeries;
+                        series = IfNumbers(trySeries);
                     }
                     else
                     {
-                        Console.WriteLine("A series must have at least 3 numbers.");
+                        Console.WriteLine("A series must have at least 3 positive numbers.");
                     }
                 }
                 return series;
             }
 
+            //receiving a series - If all parameters are positive numbers , returns a list of them, if not, returns an empty list.
+            List<int> IfNumbers(string[] trySeries)
+            {
+                List<int> series = new List<int>();
+                List<int> newSeries = new List<int>();
+                bool doasANumber = true;
+                int number;
+                foreach (string s in trySeries)
+                {
+                    if (int.TryParse(s, out number ) && number >= 0) 
+                    {
+                        newSeries.Add(number);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid series");
+                        doasANumber = false;
+                        break;
+                    }
+                }
+                if (doasANumber)
+                {
+                    series = newSeries;
+                    return series;
+                }
+                else
+                {
+                    return series;
+                }
+            }
+
+            
+ 
+
             //receiving a series - Returens the series in sorted order.
-            List<int> sort(List<int> series)
+            List<int> Sort(List<int> series)
             {
                 List<int> newSeries = new List<int>();
-                for(int i = 0;i < series.Count; i++)
+                for (int i = 0; i < SumOfElements(series); i++)
                 {
                     newSeries.Add(series[i]);
                 }
-                newSeries.Sort();
+                int temp;
+                for (int i = 0; i < SumOfElements(newSeries) - 1; i++)
+                {
+                    for (int j = 0; j < SumOfElements(newSeries) - i - 1; j++)
+                    {
+                        if (newSeries[j] > newSeries[j + 1])
+                        {
+                            temp = newSeries[j];
+                            newSeries[j] = newSeries[j + 1];
+                            newSeries[j + 1] = temp;
+
+                        }
+                    }
+                }
                 return newSeries;
             }
 
             //receiving a series - Returns the series in reverse
-            List<int> reverse(List <int> series)
+            List<int> Reverse(List <int> series)
             {
                 List<int> newSeries = new List<int>();
-                for(int i = sumOfElements(series) - 1; i >=0; i--)
+                for(int i = SumOfElements(series) - 1; i >=0; i--)
                 {
                     newSeries.Add(series[i]);
                 }  
@@ -174,10 +210,10 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the maximum term in the series.
-            int max(List<int> series)
+            int Max(List<int> series)
             {
                 int max = series[0];
-                for (int i = 1; i < sumOfElements(series); i++)
+                for (int i = 1; i < SumOfElements(series); i++)
                 {
                     if (series[i] > max)
                     {
@@ -188,10 +224,10 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the minimum term in the series.
-            int min(List<int> series)
+            int Min(List<int> series)
             {
                 int min = series[0];
-                for (int i = 1; i < sumOfElements(series); i++)
+                for (int i = 1; i < SumOfElements(series); i++)
                 {
                     if (series[i] < min)
                     {
@@ -202,7 +238,7 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the sum of the elements in the series
-            int sumOfElements(List<int> series)
+            int SumOfElements(List<int> series)
             {
                 int sum = 0;
                 foreach(int item in series)
@@ -213,10 +249,10 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the sum of all elements in a series
-            int sumOfAll(List<int> series)
+            int SumOfAll(List<int> series)
             {
                 int sum = 0;
-                for (int i = 0; i < sumOfElements(series); i++)
+                for (int i = 0; i < SumOfElements(series); i++)
                 {
                     sum += series[i];
                 }    
@@ -224,10 +260,11 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the average of the array elements
-            int average(List<int> series)
+            float Average(List<int> series)
             {
-                return sumOfAll(series) / sumOfElements(series) ;
-            }
+                return (float)SumOfAll(series) / SumOfElements(series) ;
+            }            
         }
     }
 }
+
