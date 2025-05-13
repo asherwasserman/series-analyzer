@@ -24,27 +24,35 @@ namespace SeriesAnlyzer
             List<int> changingTheSeries()
             {
                 List<int> series = new List<int>();
-                bool doasANumber = false;
-                while (doasANumber == false && series.Count < 3) 
-
+                
+                while (true) 
                 {
                     Console.WriteLine("please enter a series: ");
                     string input = Console.ReadLine()!;
                     string[] trySeries = input.Split(' ' , ',');
+                    List<int> newSeries = new List<int>();
+                    bool doasANumber = true;
                     int number;
                     foreach (string s in trySeries)
                     {
-                        doasANumber = int.TryParse(s, out number);
-                        series.Add(number);
-                        if (doasANumber == false)
+                        if (int.TryParse(s, out number))
+                        {
+                            newSeries.Add(number);
+                        }
+                        else
                         {
                             Console.WriteLine("Invalid series");
+                            doasANumber = false;
                             break;
                         }
                     }
+                    if(doasANumber && newSeries.Count >= 3)
+                    {
+                        series = newSeries;
+                        break;
+                    }
                 }
                 return series;
-
             }
 
             //receiving a series - Returens the series in sorted order.
@@ -55,6 +63,7 @@ namespace SeriesAnlyzer
                 {
                     newSeries.Add(series[i]);
                 }
+                newSeries.Sort();
                 return newSeries;
             }
 
@@ -70,15 +79,31 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the maximum term in the series.
-            int max()
+            int max(List<int> series)
             {
-
+                int max = series[0];
+                for (int i = 1; i < series.Count; i++)
+                {
+                    if (series[i] > max)
+                    {
+                        max = series[i];
+                    }
+                }
+                return max;
             }
 
             //receiving a series - Returns the minimum term in the series.
             int min()
             {
-
+                int min = series[0];
+                for (int i = 1; i < series.Count; i++)
+                {
+                    if (series[i] < min)
+                    {
+                        min = series[i];
+                    }
+                }
+                return min;
             }
 
             //receiving a series - Returns the sum of the elements in the series
