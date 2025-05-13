@@ -128,9 +128,9 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the average of the array elements
-            int average()
+            int average(List<int> series)
             {
-
+                return sumOfAll(series) / sumOfElements(series) ;
             }
         }
     }
