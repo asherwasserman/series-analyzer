@@ -106,9 +106,14 @@ namespace SeriesAnlyzer
             }
 
             //receiving a series - Returns the sum of the elements in the series
-            int sumOfElements()
+            int sumOfElements(List<int> series)
             {
-
+                int sum = 0;
+                foreach(int item in series)
+                {
+                    sum++;
+                }
+                return sum;
             }
 
             //receiving a series - Returns the sum of all elements in a series
